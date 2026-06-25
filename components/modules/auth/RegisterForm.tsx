@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/password";
 import { cn } from "@/lib/utils";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { setVerifyEmail } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -50,6 +52,7 @@ export function RegisterForm({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [register] = useRegisterMutation();
   const navigate = useRouter();
+  const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -70,6 +73,9 @@ export function RegisterForm({
     try {
       const result = await register(userInfo).unwrap();
       console.log(result);
+
+      dispatch(setVerifyEmail(data.email));
+
       toast.success("User created successfully!");
       navigate.push("/verify");
     } catch (error) {

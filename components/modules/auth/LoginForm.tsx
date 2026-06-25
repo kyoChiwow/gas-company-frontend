@@ -52,7 +52,8 @@ export default function LoginForm({
       }
     } catch (error: any) {
       console.log(error);
-      toast.error("Something went wrong!", error);
+      const message = error?.data?.message || "Something went wrong!";
+      toast.error(message);
     }
   };
   return (
