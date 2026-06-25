@@ -1,5 +1,3 @@
-import Footer from "@/components/general/Footer";
-import Navbar from "@/components/general/Navbar";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
@@ -39,13 +37,7 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="flex-1 max-w-7xl mx-auto">
-          {children}
-        </main>
-        <Footer />
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
