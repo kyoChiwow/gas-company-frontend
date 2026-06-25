@@ -1,3 +1,5 @@
+import StoreProvider from "@/components/providers/StoreProvider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
@@ -37,7 +39,12 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <StoreProvider>
+          <main>{children}</main>
+          <Toaster />
+        </StoreProvider>
+      </body>
     </html>
   );
 }

@@ -14,8 +14,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  authApi,
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hooks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 import Logo from "../miscellaneous/Logo";
 
 // Navigation links array to be used in both desktop and mobile menus
@@ -28,11 +35,26 @@ const navigationLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { data: getMe } = useUserInfoQuery(undefined);
+  const [logOut] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  console.log(getMe);
 
   const linksWithActiveState = navigationLinks.map((link) => ({
     ...link,
     isActive: link.href === pathname,
   }));
+
+  const handleLogout = async () => {
+    try {
+      await logOut(undefined).unwrap();
+      dispatch(authApi.util.resetApiState());
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <header className="border-b px-4 md:px-6">
@@ -123,12 +145,25 @@ export default function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <Button asChild className="text-sm" size="sm" variant="ghost">
-            <Link href="/login">Sign In</Link>
-          </Button>
-          <Button asChild className="text-sm" size="sm">
-            <Link href="/register">Register</Link>
-          </Button>
+          {!getMe?.data?.email && (
+            <Button asChild className="text-sm">
+              <Link href="/login">Login</Link>
+            </Button>
+          )}
+          {getMe?.data?.email && (
+            <div className="flex items-center gap-1">
+              <Button
+                variant={"outline"}
+                onClick={handleLogout}
+                className="text-sm"
+              >
+                Logout
+              </Button>
+              <Button asChild>
+                <Link href={"/me"}>Go To Profile</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </header>

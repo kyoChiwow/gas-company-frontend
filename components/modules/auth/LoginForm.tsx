@@ -1,36 +1,60 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import config from "@/config";
+import { cn } from "@/lib/utils";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
 
 const loginSchema = z.object({
-    email: z.email(),
-    password: z.string().min(6),
+  email: z.email(),
+  password: z.string().min(6),
 });
 
 export default function LoginForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    const form = useForm<z.infer<typeof loginSchema>>({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    })
-    
-    const onSubmit = (data: z.infer<typeof loginSchema>) => {
-        console.log(data);
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useRouter();
+
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+    try {
+      const res = await login(data).unwrap();
+
+      if (res.success) {
+        toast.success("Logged in successfully!");
+        navigate.push("/");
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error("Something went wrong!", error);
     }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -89,8 +113,8 @@ export default function LoginForm({
             />
             {/* Password */}
 
-            <Button className="w-full" type="submit">
-              Submit
+            <Button className="w-full" type="submit" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
         </Form>
@@ -119,5 +143,5 @@ export default function LoginForm({
         </Link>
       </div>
     </div>
-  )
+  );
 }
