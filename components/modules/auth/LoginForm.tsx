@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import config from "@/config";
 
 const loginSchema = z.object({
     email: z.email(),
@@ -27,7 +28,7 @@ export default function LoginForm({
         },
     })
     
-    const onSubmit = (data) => {
+    const onSubmit = (data: z.infer<typeof loginSchema>) => {
         console.log(data);
     }
   return (
@@ -102,7 +103,7 @@ export default function LoginForm({
         </div>
 
         <Button
-        //   onClick={() => window.open(`${config.baseUrl}/auth/google`)}
+          onClick={() => window.open(`${config.baseUrl}/auth/google`)}
           type="button"
           variant="outline"
           className="w-full cursor-pointer"
@@ -112,7 +113,7 @@ export default function LoginForm({
       </div>
 
       <div className="text-center text-sm">
-        Already have an account?{" "}
+        Do not have an account?{" "}
         <Link href="/register" className="underline underline-offset-4">
           Register
         </Link>
