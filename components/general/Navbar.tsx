@@ -24,6 +24,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import Logo from "../miscellaneous/Logo";
+import { ModeToggle } from "./ModeToggler";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -145,6 +146,7 @@ export default function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
+          <ModeToggle />
           {!getMe?.data?.email && (
             <Button asChild className="text-sm">
               <Link href="/login">Login</Link>

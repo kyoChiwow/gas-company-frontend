@@ -1,5 +1,7 @@
 import StoreProvider from "@/components/providers/StoreProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
@@ -30,6 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
@@ -40,10 +43,19 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <StoreProvider>
-          <main>{children}</main>
-          <Toaster />
-        </StoreProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider>
+            <StoreProvider>
+              <main>{children}</main>
+              <Toaster />
+            </StoreProvider>
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
