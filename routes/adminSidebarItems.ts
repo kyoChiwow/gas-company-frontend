@@ -27,6 +27,10 @@ export const adminSidebarItems: ISidebarItem[] = [
       {
         title: "Products",
         url: "/dashboard/products",
+      },
+      {
+        title: "Requested Quotas",
+        url: "/dashboard/quotas",
       }
     ],
   },
