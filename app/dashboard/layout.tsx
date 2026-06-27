@@ -19,6 +19,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 const breadcrumbTitles: Record<string, string> = {
   dashboard: "Dashboard",
@@ -68,8 +69,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         {index === arr.length - 1 ? (
                           <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                         ) : (
-                          <BreadcrumbLink href={crumb.href}>
-                            {crumb.label}
+                          <BreadcrumbLink asChild>
+                            <Link href={crumb.href}>{crumb.label}</Link>
                           </BreadcrumbLink>
                         )}
                       </BreadcrumbItem>

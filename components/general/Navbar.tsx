@@ -33,7 +33,7 @@ const navigationLinks = [
   {
     href: "/dashboard",
     label: "Dashboard",
-    role: [role.admin || role.superAdmin],
+    role: [role.admin, role.superAdmin],
   },
 ];
 
@@ -43,9 +43,17 @@ export default function Navbar() {
   const [logOut] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
-  const linksWithActiveState = navigationLinks.map((link) => ({
+  const userRoles = getMe?.data?.role ?? [];
+
+  const visibleLinks = navigationLinks.filter((link) => {
+    if (!link.role) return true;
+
+    return link.role.some((allowedRole) => userRoles.includes(allowedRole));
+  });
+
+  const linksWithActiveState = visibleLinks.map((link) => ({
     ...link,
-    isActive: link.href === pathname,
+    isActive: pathname === link.href,
   }));
 
   const handleLogout = async () => {
@@ -57,6 +65,8 @@ export default function Navbar() {
       console.error(error);
     }
   };
+
+  console.log(getMe);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-sky-100/80 bg-white/80 backdrop-blur-md px-4 dark:border-slate-800 dark:bg-slate-950/80 md:px-6">
@@ -106,19 +116,24 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-1">
                   {linksWithActiveState.map((link) => (
                     <NavigationMenuItem className="w-full" key={link.label}>
-                      <NavigationMenuLink
-                        active={link.isActive}
-                        className={`
-                          flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200
-                          ${
-                            link.isActive
-                              ? "bg-sky-500 text-white font-semibold"
-                              : "text-slate-600 hover:bg-sky-50 hover:text-sky-600 dark:text-slate-300 dark:hover:bg-slate-900"
-                          }
-                        `}
-                        href={link.href}
-                      >
-                        {link.label}
+                      <NavigationMenuLink asChild active={link.isActive}>
+                        <Link
+                          href={link.href}
+                          className={`
+                          relative rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all duration-200 group
+                            ${
+                              link.isActive
+                                ? "text-sky-600 font-semibold"
+                                : "text-slate-500 hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-400"
+                            }
+                          `}
+                        >
+                          {link.label}
+
+                          {link.isActive && (
+                            <span className="absolute bottom-0 left-3.5 right-3.5 h-0.5 rounded-full bg-orange-500" />
+                          )}
+                        </Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -149,23 +164,24 @@ export default function Navbar() {
               <NavigationMenuList className="gap-1">
                 {linksWithActiveState.map((link) => (
                   <NavigationMenuItem key={link.label}>
-                    <NavigationMenuLink
-                      active={link.isActive}
-                      className={`
-                        relative rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all duration-200 group
-                        ${
-                          link.isActive
-                            ? "text-sky-600 font-semibold"
-                            : "text-slate-500 hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-400"
-                        }
-                      `}
-                      href={link.href}
-                    >
-                      {link.label}
-                      {/* Animated bottom indicator bar for active path */}
-                      {link.isActive && (
-                        <span className="absolute bottom-0 left-3.5 right-3.5 h-0.5 rounded-full bg-orange-500" />
-                      )}
+                    <NavigationMenuLink asChild active={link.isActive}>
+                      <Link
+                        href={link.href}
+                        className={`
+                          relative rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all duration-200 group
+                          ${
+                            link.isActive
+                              ? "text-sky-600 font-semibold"
+                              : "text-slate-500 hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-400"
+                          }
+                        `}
+                      >
+                        {link.label}
+
+                        {link.isActive && (
+                          <span className="absolute bottom-0 left-3.5 right-3.5 h-0.5 rounded-full bg-orange-500" />
+                        )}
+                      </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
