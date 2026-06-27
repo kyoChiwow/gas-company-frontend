@@ -1,5 +1,5 @@
 export default function Brands() {
   return (
-    <div>page</div>
+    <div>Brand page</div>
   )
 }

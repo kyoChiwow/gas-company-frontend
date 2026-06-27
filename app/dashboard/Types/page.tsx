@@ -1,5 +1,5 @@
 export default function Types() {
   return (
-    <div>page</div>
+    <div>Types page</div>
   )
 }

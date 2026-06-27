@@ -1,5 +1,5 @@
 export default function Sections() {
   return (
-    <div>page</div>
+    <div>Sections page</div>
   )
 }
