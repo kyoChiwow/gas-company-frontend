@@ -59,7 +59,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent>
               <SidebarMenu className="gap-1">
                 {group.items.map((item) => {
-                  // Checks if current item URL matches the browser path
                   const isCurrentActive =
                     pathname === item.url || item.isActive;
 

@@ -80,6 +80,7 @@ export interface ISidebarItem {
   items: {
     title: string;
     url: string;
+    isActive?: boolean;
   }[];
 }
 // Sidear Item Type

@@ -5,6 +5,10 @@ export const adminSidebarItems: ISidebarItem[] = [
     title: "Dashboard",
     items: [
       {
+        title: "Home",
+        url: "/dashboard",
+      },
+      {
         title: "Sections",
         url: "/dashboard/sections",
       },
