@@ -24,6 +24,10 @@ export const adminSidebarItems: ISidebarItem[] = [
         title: "Types",
         url: "/dashboard/types",
       },
+      {
+        title: "Products",
+        url: "/dashboard/products",
+      }
     ],
   },
 ];
