@@ -1,9 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 import { AppSidebar } from "@/components/app-sidebar";
+import AdminRoute from "@/components/auth/AdminRoute";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,7 +20,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-// Optional: Friendly names for your routes
 const breadcrumbTitles: Record<string, string> = {
   dashboard: "Dashboard",
   products: "Products",
@@ -46,43 +46,45 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   }));
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
+    <AdminRoute>
+      <SidebarProvider>
+        <AppSidebar />
 
-      <SidebarInset>
-        <header className="flex h-16 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
+        <SidebarInset>
+          <header className="flex h-16 items-center gap-2 border-b px-4">
+            <SidebarTrigger className="-ml-1" />
 
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-vertical:h-4 data-vertical:self-auto"
-          />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+            />
 
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
+            <Breadcrumb>
+              <BreadcrumbList>
+                {[{ href: "/", label: "Home" }, ...breadcrumbs].map(
+                  (crumb, index, arr) => (
+                    <React.Fragment key={crumb.href}>
+                      <BreadcrumbItem>
+                        {index === arr.length - 1 ? (
+                          <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink href={crumb.href}>
+                            {crumb.label}
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
 
-              {breadcrumbs.map((crumb, index) => (
-                <BreadcrumbItem key={crumb.href}>
-                  <BreadcrumbSeparator />
+                      {index < arr.length - 1 && <BreadcrumbSeparator />}
+                    </React.Fragment>
+                  ),
+                )}
+              </BreadcrumbList>
+            </Breadcrumb>
+          </header>
 
-                  {index === breadcrumbs.length - 1 ? (
-                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                  ) : (
-                    <BreadcrumbLink href={crumb.href}>
-                      {crumb.label}
-                    </BreadcrumbLink>
-                  )}
-                </BreadcrumbItem>
-              ))}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-
-        <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+          <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+        </SidebarInset>
+      </SidebarProvider>
+    </AdminRoute>
   );
 }
