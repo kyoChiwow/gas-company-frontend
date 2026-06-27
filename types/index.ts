@@ -74,6 +74,16 @@ export interface IMeta {
 }
 // Meta Type
 
+// Sidear Item Type
+export interface ISidebarItem {
+  title: string;
+  items: {
+    title: string;
+    url: string;
+  }[];
+}
+// Sidear Item Type
+
 
 export type TRole =
   | "SUPER_ADMIN"
