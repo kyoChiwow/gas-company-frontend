@@ -73,7 +73,7 @@ export default function Brands() {
     values: NameDescriptionFormValues
   ) => {
     try {
-      await updateBrand({ id: brandId, sectionData: values }).unwrap();
+      await updateBrand({ id: brandId, brandData: values }).unwrap();
       toast.success("Brand updated successfully!");
     } catch (error: any) {
       toast.error(

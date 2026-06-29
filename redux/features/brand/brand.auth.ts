@@ -3,10 +3,10 @@ import { baseApi } from "@/redux/baseApi";
 export const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     addBrand: builder.mutation({
-      query: (sectionData) => ({
+      query: (brandData) => ({
         url: "/brand/create",
         method: "POST",
-        data: sectionData,
+        data: brandData,
       }),
       invalidatesTags: ["BRAND"],
     }),
@@ -26,10 +26,10 @@ export const brandApi = baseApi.injectEndpoints({
       providesTags: ["BRAND"],
     }),
     updateBrand: builder.mutation({
-      query: ({ id, sectionData }) => ({
+      query: ({ id, brandData }) => ({
         url: `/brand/${id}`,
         method: "PATCH",
-        data: sectionData,
+        data: brandData,
       }),
       invalidatesTags: ["BRAND"],
     }),
