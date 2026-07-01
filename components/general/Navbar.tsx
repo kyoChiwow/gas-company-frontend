@@ -19,10 +19,17 @@ import {
   useUserInfoQuery,
 } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hooks";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import Logo from "../miscellaneous/Logo";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { ModeToggle } from "./ModeToggler";
 
 const navigationLinks = [
@@ -65,8 +72,6 @@ export default function Navbar() {
       console.error(error);
     }
   };
-
-  console.log(getMe);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-sky-100/80 bg-white/80 backdrop-blur-md px-4 dark:border-slate-800 dark:bg-slate-950/80 md:px-6">
@@ -207,23 +212,57 @@ export default function Navbar() {
           )}
 
           {getMe?.data?.email && (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                className="text-sm border-sky-100 text-slate-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-all dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900 rounded-lg px-3.5"
-              >
-                Logout
-              </Button>
-              <Button
-                asChild
-                size="sm"
-                className="bg-linear-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white shadow-md shadow-sky-500/10 active:scale-98 transition-all rounded-lg px-4 font-medium"
-              >
-                <Link href="/me">Go To Profile</Link>
-              </Button>
-            </div>
+            <>
+              {/* Desktop */}
+              <div className="hidden lg:flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="border-sky-100 text-slate-600 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-all dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-900 rounded-lg px-3.5"
+                >
+                  Logout
+                </Button>
+
+                <Button
+                  asChild
+                  size="sm"
+                  className="bg-linear-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white shadow-md shadow-sky-500/10 active:scale-98 transition-all rounded-lg px-4 font-medium"
+                >
+                  <Link href="/me">Go To Profile</Link>
+                </Button>
+              </div>
+
+              {/* Mobile */}
+              <div className="lg:hidden">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="rounded-lg"
+                    >
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/me" className="cursor-pointer">
+                        Go To Profile
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer text-red-500 focus:text-red-500"
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </>
           )}
         </div>
       </div>
