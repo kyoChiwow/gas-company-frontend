@@ -4,6 +4,7 @@ import {
   FolderTree,
   Package,
   Tags,
+  User,
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
@@ -38,6 +39,12 @@ const actions = [
     description: "Homepage sections",
     href: "/dashboard/sections",
     icon: Wrench,
+  },
+  {
+    title: "Users",
+    description: "Manage user accounts",
+    href: "/dashboard/users",
+    icon: User,
   },
 ];
 

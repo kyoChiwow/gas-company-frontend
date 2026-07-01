@@ -9,6 +9,10 @@ export const adminSidebarItems: ISidebarItem[] = [
         url: "/dashboard",
       },
       {
+        title: "Users",
+        url: "/dashboard/users",
+      },
+      {
         title: "Sections",
         url: "/dashboard/sections",
       },

@@ -53,6 +53,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["USER"],
     }),
+    getAllUsers: builder.query({
+      query: (params) => ({
+        url: "/user/get-all",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["USER"],
+    }),
     editProfile: builder.mutation({
       query: ({userId, data}) => ({
         url: `/user/${userId}`,
@@ -68,6 +76,41 @@ export const authApi = baseApi.injectEndpoints({
         data: userInfo,
       }),
     }),
+    makeAdmin: builder.mutation({
+      query: ({userId}) => ({
+        url: `/user/${userId}/make-admin`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
+    makeSuperAdmin: builder.mutation({
+      query: ({userId}) => ({
+        url: `/user/${userId}/make-super-admin`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
+    makeUser: builder.mutation({
+      query: ({userId}) => ({
+        url: `/user/${userId}/make-user`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
+    deleteUser: builder.mutation({
+      query: ({userId}) => ({
+        url: `/user/${userId}/delete`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
+    restoreUser: builder.mutation({
+      query: ({userId}) => ({
+        url: `/user/${userId}/restore`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
   }),
 });
 
@@ -80,4 +123,10 @@ export const {
   useLogoutMutation,
   useEditProfileMutation,
   useChangePasswordMutation,
+  useGetAllUsersQuery,
+  useMakeAdminMutation,
+  useMakeSuperAdminMutation,
+  useDeleteUserMutation,
+  useRestoreUserMutation,
+  useMakeUserMutation,
 } = authApi;

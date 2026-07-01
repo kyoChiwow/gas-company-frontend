@@ -244,7 +244,7 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 text-sky-500" />
                 <h3 className="font-semibold text-slate-800">
-                  Personal information
+                  Personal Information
                 </h3>
               </div>
               {!isEditingProfile ? (
@@ -339,7 +339,7 @@ export default function ProfilePage() {
             {/* Card header */}
             <div className="flex items-center gap-2 border-b border-slate-100 px-6 py-4">
               <KeyRound className="h-4 w-4 text-sky-500" />
-              <h3 className="font-semibold text-slate-800">Change password</h3>
+              <h3 className="font-semibold text-slate-800">Change Password</h3>
             </div>
 
             {/* Card body */}
