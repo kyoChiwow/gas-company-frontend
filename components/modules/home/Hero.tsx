@@ -1,12 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
-
 import {
-  Flame,
   Factory,
+  Flame,
   HeartPulse,
   Sparkles,
 } from "lucide-react";
@@ -15,27 +15,40 @@ import FloatingCard from "./FloatingCard";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-[#0A2A66] via-[#0E65C9] to-[#38BDF8] rounded-b-md">
-      {/* Background Blur */}
+    <section className="relative overflow-hidden rounded-b-md">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <Image
+          src="/Background.jpg"
+          alt="Background"
+          fill
+          priority
+          className="object-cover"
+        />
+      </div>
 
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-linear-to-r from-[#061B42]/95 via-[#0B6BCB]/80 to-[#38BDF8]/60" />
+
+      {/* Decorative Blur */}
       <div className="absolute -left-40 top-0 h-96 w-96 rounded-full bg-sky-400/20 blur-[120px]" />
 
-      <div className="absolute right-0 bottom-0 h-125 w-125 rounded-full bg-orange-500/20 blur-[150px]" />
+      <div className="absolute bottom-0 right-0 h-125 w-125 rounded-full bg-orange-500/20 blur-[150px]" />
 
-      <div className="container mx-auto min-h-[90vh] px-6 py-16 flex flex-col-reverse items-center gap-14 lg:grid lg:grid-cols-2">
-
+      {/* Content */}
+      <div className="relative z-10 container mx-auto min-h-[90vh] px-6 py-16 flex flex-col-reverse items-center gap-14 lg:grid lg:grid-cols-2">
         {/* LEFT */}
 
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: .8 }}
+          transition={{ duration: 0.8 }}
         >
-          <p className="uppercase tracking-[0.3em] text-sky-200 font-semibold">
+          <p className="font-semibold uppercase tracking-[0.3em] text-sky-200">
             Trusted Since 2004
           </p>
 
-          <h1 className="mt-5 text-5xl lg:text-7xl font-extrabold leading-tight text-white">
+          <h1 className="mt-5 text-5xl font-extrabold leading-tight text-white lg:text-7xl">
             <TypeAnimation
               sequence={[
                 "Dhaka's Premier Gas Distributor",
@@ -70,14 +83,14 @@ export default function Hero() {
           >
             <Link
               href="/products"
-              className="rounded-xl bg-orange-500 px-7 py-4 font-semibold text-white transition hover:bg-orange-600"
+              className="rounded-xl bg-orange-500 px-7 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-orange-600"
             >
               Order Now
             </Link>
 
             <Link
               href="/about"
-              className="rounded-xl border border-white/40 bg-white/10 backdrop-blur px-7 py-4 font-semibold text-white hover:bg-white/20 transition"
+              className="rounded-xl border border-white/40 bg-white/10 px-7 py-4 font-semibold text-white backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-white/20"
             >
               Learn More
             </Link>
@@ -89,12 +102,12 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: .8 }}
-          className="relative flex justify-center items-center h-155 w-full"
+          transition={{ duration: 0.8 }}
+          className="relative flex h-155 w-full items-center justify-center"
         >
           {/* Main Image */}
 
-          <motion.img
+          <motion.div
             animate={{
               y: [0, -10, 0],
             }}
@@ -103,10 +116,16 @@ export default function Hero() {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            src="/gascylinder.jpg"
-            alt="Gas Cylinders"
-            className="max-w-full object-contain drop-shadow-2xl rounded-md"
-          />
+            className="relative h-125 w-125 max-w-full"
+          >
+            <Image
+              src="/gascylinder.jpg"
+              alt="Gas Cylinders"
+              fill
+              priority
+              className="rounded-md object-contain drop-shadow-2xl"
+            />
+          </motion.div>
 
           {/* Floating Cards */}
 
@@ -114,7 +133,7 @@ export default function Hero() {
             icon={Flame}
             title="LPG"
             description="Domestic & Commercial"
-            className="top-48 left-10"
+            className="left-10 top-48"
             delay={0}
           />
 
@@ -122,8 +141,8 @@ export default function Hero() {
             icon={Factory}
             title="Industrial"
             description="Manufacturing Grade"
-            className="top-35 right-4"
-            delay={.5}
+            className="right-4 top-32"
+            delay={0.5}
           />
 
           <FloatingCard

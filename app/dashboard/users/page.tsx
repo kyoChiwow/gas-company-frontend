@@ -29,6 +29,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import PaginationComp from "@/components/general/PaginationComp";
+import DeleteUserDialog from "@/components/modules/users/DeleteUserDialog";
+import MakeAdminDialog from "@/components/modules/users/MakeAdminDialog";
+import MakeSuperAdminDialog from "@/components/modules/users/MakeSuperAdminDialog";
+import MakeUserDialog from "@/components/modules/users/MakeUserDialog";
+import RestoreUserDialog from "@/components/modules/users/RestoreUserDialog";
 import RoleBadge from "@/components/modules/users/RoleBadge";
 import StatusBadge from "@/components/modules/users/StatusBadge";
 import {
@@ -39,11 +45,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import DeleteUserDialog from "@/components/modules/users/DeleteUserDialog";
-import RestoreUserDialog from "@/components/modules/users/RestoreUserDialog";
-import MakeUserDialog from "@/components/modules/users/MakeUserDialog";
-import MakeSuperAdminDialog from "@/components/modules/users/MakeSuperAdminDialog";
-import MakeAdminDialog from "@/components/modules/users/MakeAdminDialog";
 
 type UserAction =
   | "make-admin"
@@ -58,6 +59,7 @@ type UserDialogData = {
 };
 
 export default function UsersPage() {
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
   const {
@@ -66,9 +68,12 @@ export default function UsersPage() {
     isFetching,
   } = useGetAllUsersQuery({
     searchTerm: search,
+    page,
+    limit: 10,
   });
 
   const allUsers = users?.data ?? [];
+  const meta = users?.meta;
 
   const [dialog, setDialog] = useState<{
     type: UserAction;
@@ -105,7 +110,10 @@ export default function UsersPage() {
         <Input
           placeholder="Search by name or email..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           className="border-sky-200 pl-10 focus-visible:border-sky-400 focus-visible:ring-sky-300"
         />
       </div>
@@ -334,6 +342,15 @@ export default function UsersPage() {
               )}
             </TableBody>
           </Table>
+          {meta && meta.totalPage > 1 && (
+            <div className="flex justify-end">
+              <PaginationComp
+                currentPage={page}
+                totalPages={meta.totalPage}
+                onPageChange={setPage}
+              />
+            </div>
+          )}
           {dialog?.type === "make-admin" && (
             <MakeAdminDialog
               open

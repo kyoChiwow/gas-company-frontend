@@ -3,6 +3,7 @@ import {
   Building2,
   FolderTree,
   Package,
+  Package2,
   Tags,
   User,
   Wrench,
@@ -45,6 +46,12 @@ const actions = [
     description: "Manage user accounts",
     href: "/dashboard/users",
     icon: User,
+  },
+  {
+    title: "Quotas",
+    description: "Manage customer quotas",
+    href: "/dashboard/quotas",
+    icon: Package2,
   },
 ];
 
@@ -122,36 +129,6 @@ export default function DashboardPage() {
           })}
         </div>
       </section>
-
-      {/* Bottom */}
-
-      <div className="grid gap-6 lg:grid-cols-2">
-
-        <div className="rounded-2xl border bg-card p-6">
-          <h3 className="text-lg font-semibold">
-            Recent Activity
-          </h3>
-
-          <div className="mt-8 flex h-52 items-center justify-center rounded-xl border border-dashed">
-            <p className="text-muted-foreground">
-              Activity feed will appear here.
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border bg-card p-6">
-          <h3 className="text-lg font-semibold">
-            System Overview
-          </h3>
-
-          <div className="mt-8 flex h-52 items-center justify-center rounded-xl border border-dashed">
-            <p className="text-muted-foreground">
-              Future charts, analytics or announcements.
-            </p>
-          </div>
-        </div>
-
-      </div>
 
     </div>
   );

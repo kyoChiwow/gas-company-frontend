@@ -41,7 +41,7 @@ export default function Categories() {
             {/* Added relative and an explicit height constraint here to prevent 0px element collapse */}
             <div className="relative h-125 w-full overflow-hidden rounded-3xl shadow-2xl">
               <Image
-                src="/gastechnician.jpg"
+                src="/Gas-Technician.jpg"
                 alt="Gas Technician"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"

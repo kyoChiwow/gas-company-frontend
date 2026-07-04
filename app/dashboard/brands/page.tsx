@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import PaginationComp from "@/components/general/PaginationComp";
 import NameDescriptionDialog, {
   NameDescriptionFormValues,
 } from "@/components/modules/products/NameDescriptionForm";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,23 +26,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
   useAddBrandMutation,
   useDeleteBrandMutation,
   useGetAllBrandsQuery,
   useUpdateBrandMutation,
 } from "@/redux/features/brand/brand.auth";
+import { Pencil, Search, Sparkles, Tag, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Tag, Search, Pencil, Trash2, Sparkles } from "lucide-react";
 
 type BrandFormValues = {
   name: string;
@@ -40,6 +41,7 @@ type BrandFormValues = {
 };
 
 export default function Brands() {
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [brandToDelete, setBrandToDelete] = useState<{
     id: string;
@@ -52,9 +54,12 @@ export default function Brands() {
 
   const { data, isLoading } = useGetAllBrandsQuery({
     searchTerm: search,
+    page,
+    limit: 10,
   });
 
   const brands = data?.data ?? [];
+  const meta = data?.meta;
 
   const handleAddBrand = async (values: BrandFormValues) => {
     try {
@@ -62,23 +67,21 @@ export default function Brands() {
       toast.success("Brand added successfully!");
     } catch (error: any) {
       toast.error(
-        error?.data?.message ??
-          "An error occurred while adding the brand."
+        error?.data?.message ?? "An error occurred while adding the brand.",
       );
     }
   };
 
   const handleUpdateBrand = async (
     brandId: string,
-    values: NameDescriptionFormValues
+    values: NameDescriptionFormValues,
   ) => {
     try {
       await updateBrand({ id: brandId, brandData: values }).unwrap();
       toast.success("Brand updated successfully!");
     } catch (error: any) {
       toast.error(
-        error?.data?.message ??
-          "An error occurred while updating the brand."
+        error?.data?.message ?? "An error occurred while updating the brand.",
       );
     }
   };
@@ -91,8 +94,7 @@ export default function Brands() {
       toast.success("Brand deleted successfully!");
     } catch (error: any) {
       toast.error(
-        error?.data?.message ??
-          "An error occurred while deleting the brand."
+        error?.data?.message ?? "An error occurred while deleting the brand.",
       );
     } finally {
       setBrandToDelete(null);
@@ -108,9 +110,7 @@ export default function Brands() {
             <Tag className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800">
-              Brands
-            </h2>
+            <h2 className="text-2xl font-bold text-slate-800">Brands</h2>
             <p className="text-sm text-slate-500">
               Manage all available brands.
             </p>
@@ -135,7 +135,10 @@ export default function Brands() {
         <Input
           placeholder="Search brand..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           className="border-sky-200 pl-9 focus-visible:border-sky-400 focus-visible:ring-sky-200"
         />
       </div>
@@ -148,9 +151,7 @@ export default function Brands() {
               <TableHead className="w-16 font-semibold text-sky-700">
                 #
               </TableHead>
-              <TableHead className="font-semibold text-sky-700">
-                Name
-              </TableHead>
+              <TableHead className="font-semibold text-sky-700">Name</TableHead>
               <TableHead className="font-semibold text-sky-700">
                 Description
               </TableHead>
@@ -187,9 +188,7 @@ export default function Brands() {
                   key={brand._id}
                   className="transition-colors hover:bg-orange-50/50"
                 >
-                  <TableCell className="text-slate-400">
-                    {index + 1}
-                  </TableCell>
+                  <TableCell className="text-slate-400">{index + 1}</TableCell>
 
                   <TableCell className="font-medium text-slate-800">
                     <span className="inline-flex items-center gap-2">
@@ -261,6 +260,16 @@ export default function Brands() {
             )}
           </TableBody>
         </Table>
+
+        {meta && meta.totalPage > 1 && (
+          <div className="flex justify-end">
+            <PaginationComp
+              currentPage={page}
+              totalPages={meta.totalPage}
+              onPageChange={setPage}
+            />
+          </div>
+        )}
       </div>
 
       {/* Delete confirmation */}
@@ -282,9 +291,7 @@ export default function Brands() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>
-              Cancel
-            </AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               disabled={isDeleting}
               onClick={handleDeleteBrand}

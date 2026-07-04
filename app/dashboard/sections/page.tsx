@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import PaginationComp from "@/components/general/PaginationComp";
 import NameDescriptionDialog, {
   NameDescriptionFormValues,
 } from "@/components/modules/products/NameDescriptionForm";
@@ -40,6 +41,7 @@ type SectionFormValues = {
 };
 
 export default function Sections() {
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [sectionToDelete, setSectionToDelete] = useState<{
     id: string;
@@ -52,9 +54,12 @@ export default function Sections() {
 
   const { data, isLoading } = useGetAllSectionsQuery({
     searchTerm: search,
+    page,
+    limit: 10,
   });
 
   const sections = data?.data ?? [];
+  const meta = data?.meta;
 
   const handleAddSection = async (values: SectionFormValues) => {
     try {
@@ -133,7 +138,10 @@ export default function Sections() {
         <Input
           placeholder="Search section..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           className="border-sky-200 pl-9 focus-visible:border-sky-400 focus-visible:ring-sky-200"
         />
       </div>
@@ -255,6 +263,15 @@ export default function Sections() {
             )}
           </TableBody>
         </Table>
+        {meta && meta.totalPage > 1 && (
+          <div className="flex justify-end">
+            <PaginationComp
+              currentPage={page}
+              totalPages={meta.totalPage}
+              onPageChange={setPage}
+            />
+          </div>
+        )}
       </div>
 
       {/* Delete confirmation */}

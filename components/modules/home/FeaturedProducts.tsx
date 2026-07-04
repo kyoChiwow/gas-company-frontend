@@ -16,7 +16,7 @@ const products = [
     description:
       "High-quality industrial gases for manufacturing, welding, and fabrication.",
     image:
-      "https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=900&auto=format&fit=crop",
+      "/Industrial.jpg",
     icon: Factory,
     color: "bg-sky-500",
   },
@@ -25,7 +25,7 @@ const products = [
     description:
       "Certified medical oxygen and healthcare gas solutions for hospitals.",
     image:
-      "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=900&auto=format&fit=crop",
+      "/Medical.jpg",
     icon: HeartPulse,
     color: "bg-orange-500",
   },
@@ -43,7 +43,7 @@ const products = [
     description:
       "High-purity specialty gas mixtures for laboratories and research.",
     image:
-      "https://images.unsplash.com/photo-1581092335397-9583eb92d232?q=80&w=900&auto=format&fit=crop",
+      "/Specialty.jpg",
     icon: Sparkles,
     color: "bg-orange-500",
   },

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import PaginationComp from "@/components/general/PaginationComp";
 import AddProductDialog from "@/components/modules/products/AddProduct";
 import ImportProductsCSVDialog from "@/components/modules/products/CsvDialog";
 import {
@@ -24,7 +25,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useDeleteProductMutation, useGetAllProductsQuery } from "@/redux/features/products/products.auth";
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery,
+} from "@/redux/features/products/products.auth";
 
 import {
   FileSpreadsheet,
@@ -38,20 +42,23 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function ProductsPage() {
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [productToDelete, setProductToDelete] = useState<{
     id: string;
     name: string;
   } | null>(null);
 
-  const [deleteProduct, { isLoading: isDeleting }] =
-    useDeleteProductMutation();
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
   const { data, isLoading } = useGetAllProductsQuery({
     searchTerm: search,
+    page,
+    limit: 10,
   });
 
   const products = data?.data ?? [];
+  const meta = data?.meta;
 
   const handleDeleteProduct = async () => {
     if (!productToDelete) return;
@@ -61,8 +68,7 @@ export default function ProductsPage() {
       toast.success("Product deleted successfully!");
     } catch (error: any) {
       toast.error(
-        error?.data?.message ??
-          "An error occurred while deleting the product.",
+        error?.data?.message ?? "An error occurred while deleting the product.",
       );
     } finally {
       setProductToDelete(null);
@@ -115,7 +121,10 @@ export default function ProductsPage() {
         <Input
           placeholder="Search product..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           className="border-sky-200 pl-9 focus-visible:border-sky-400 focus-visible:ring-sky-200"
         />
       </div>
@@ -129,7 +138,9 @@ export default function ProductsPage() {
                 #
               </TableHead>
               <TableHead className="font-semibold text-sky-700">Name</TableHead>
-              <TableHead className="font-semibold text-sky-700">Brand</TableHead>
+              <TableHead className="font-semibold text-sky-700">
+                Brand
+              </TableHead>
               <TableHead className="font-semibold text-sky-700">
                 Section
               </TableHead>
@@ -261,6 +272,15 @@ export default function ProductsPage() {
             )}
           </TableBody>
         </Table>
+        {meta && meta.totalPage > 1 && (
+          <div className="flex justify-end">
+            <PaginationComp
+              currentPage={page}
+              totalPages={meta.totalPage}
+              onPageChange={setPage}
+            />
+          </div>
+        )}
       </div>
 
       {/* Delete confirmation */}
