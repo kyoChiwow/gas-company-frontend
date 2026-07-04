@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -82,7 +83,7 @@ export default function RequestQuotaDialog({ product }: Props) {
       setOpen(false);
     } catch (error: any) {
       toast.error(
-        error?.data?.message || "Something went wrong. Please try again.",
+        "Please Login to request a quotation or try again later!",
       );
     }
   }
