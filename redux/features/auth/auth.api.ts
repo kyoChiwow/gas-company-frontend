@@ -46,6 +46,13 @@ export const authApi = baseApi.injectEndpoints({
         data: userInfo,
       }),
     }),
+    resendOtp: builder.mutation({
+      query: (data: { email: string }) => ({
+        url: "/otp/resend",
+        method: "POST",
+        data,
+      }),
+    }),
     userInfo: builder.query({
       query: () => ({
         url: "/user/get-me",
@@ -62,7 +69,7 @@ export const authApi = baseApi.injectEndpoints({
       providesTags: ["USER"],
     }),
     editProfile: builder.mutation({
-      query: ({userId, data}) => ({
+      query: ({ userId, data }) => ({
         url: `/user/${userId}`,
         method: "PATCH",
         data,
@@ -77,35 +84,35 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     makeAdmin: builder.mutation({
-      query: ({userId}) => ({
+      query: ({ userId }) => ({
         url: `/user/${userId}/make-admin`,
         method: "PATCH",
       }),
       invalidatesTags: ["USER"],
     }),
     makeSuperAdmin: builder.mutation({
-      query: ({userId}) => ({
+      query: ({ userId }) => ({
         url: `/user/${userId}/make-super-admin`,
         method: "PATCH",
       }),
       invalidatesTags: ["USER"],
     }),
     makeUser: builder.mutation({
-      query: ({userId}) => ({
+      query: ({ userId }) => ({
         url: `/user/${userId}/make-user`,
         method: "PATCH",
       }),
       invalidatesTags: ["USER"],
     }),
     deleteUser: builder.mutation({
-      query: ({userId}) => ({
+      query: ({ userId }) => ({
         url: `/user/${userId}/delete`,
         method: "PATCH",
       }),
       invalidatesTags: ["USER"],
     }),
     restoreUser: builder.mutation({
-      query: ({userId}) => ({
+      query: ({ userId }) => ({
         url: `/user/${userId}/restore`,
         method: "PATCH",
       }),
@@ -129,4 +136,5 @@ export const {
   useDeleteUserMutation,
   useRestoreUserMutation,
   useMakeUserMutation,
+  useResendOtpMutation,
 } = authApi;

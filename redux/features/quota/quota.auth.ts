@@ -10,6 +10,13 @@ export const quotaApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["QUOTA"],
     }),
+    initPayment: builder.mutation({
+      query: ({ quotaId, paymentMethod, amount }) => ({
+        url: `/payment/init-payment/${quotaId}`,
+        method: "POST",
+        data: { paymentMethod, amount },
+      }),
+    }),
     getAllQuotas: builder.query({
       query: (params) => ({
         url: "/quota",
@@ -48,5 +55,6 @@ export const {
   useGetAllQuotasQuery,
   useGetSingleQuotaQuery,
   useUpdateQuotaMutation,
-  useDeleteQuotaMutation
+  useDeleteQuotaMutation,
+  useInitPaymentMutation,
 } = quotaApi;

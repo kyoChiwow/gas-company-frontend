@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -23,8 +24,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { cn } from "@/lib/utils";
 import {
+  useResendOtpMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
 } from "@/redux/features/auth/auth.api";
@@ -47,14 +48,13 @@ const FormSchema = z.object({
 export default function Verify() {
   const navigate = useRouter();
   const [confirmed, setConfirmed] = useState(false);
-  const [sendOtp] = useSendOtpMutation();
-  const [verifyOtp] = useVerifyOtpMutation();
-  const [timer, setTimer] = useState(5);
+  const [sendOtp, { isLoading: isSending }] = useSendOtpMutation();
+  const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
+  const [timer, setTimer] = useState(120);
   const dispatch = useAppDispatch();
 
-  const email = useAppSelector(
-    (state) => state.auth.verifyEmail
-  );
+  const email = useAppSelector((state) => state.auth.verifyEmail);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -63,6 +63,7 @@ export default function Verify() {
     },
   });
 
+  // Action flow handling Initial Handshake Checkpoint
   const handleSendOtp = async () => {
     if (!email) return;
 
@@ -76,10 +77,38 @@ export default function Verify() {
           id: toastId,
         });
         setConfirmed(true);
-        setTimer(5);
+        setTimer(120);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(
+        error?.data?.message ?? "Failed to initialize verification sequence.",
+        {
+          id: toastId,
+        },
+      );
+    }
+  };
+
+  // FIX: Separate action hook specifically targeting the new backend resend pipeline
+  const handleResendOtp = async () => {
+    if (!email) return;
+
+    const toastId = toast.loading("Resending OTP...");
+
+    try {
+      const res = await resendOtp({ email }).unwrap();
+
+      if (res.success) {
+        toast.success("A fresh OTP code has been dispatched to your inbox!", {
+          id: toastId,
+        });
+        setTimer(120);
+        form.setValue("pin", "");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message ?? "Resend failed. Please try again.", {
+        id: toastId,
+      });
     }
   };
 
@@ -97,8 +126,13 @@ export default function Verify() {
         toast.success("OTP has been verified!", { id: toastId });
         navigate.push("/login");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(
+        error?.data?.message ?? "Invalid or expired OTP token entered.",
+        {
+          id: toastId,
+        },
+      );
     }
   };
 
@@ -114,14 +148,20 @@ export default function Verify() {
     }
 
     const timerId = setInterval(() => {
-      if (email && confirmed) {
-        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-        console.log("Tick");
-      }
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(timerId);
   }, [email, confirmed]);
+
+  // Formatter mapping helper ensuring readable format displays matching standards (e.g. 1:45)
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+  const globalUiBlock = isSending || isVerifying || isResending;
 
   return (
     <div className="grid place-content-center h-screen">
@@ -151,6 +191,7 @@ export default function Verify() {
                         <InputOTP
                           containerClassName="space-x-1"
                           maxLength={6}
+                          disabled={globalUiBlock}
                           {...field}
                         >
                           <InputOTPGroup>
@@ -174,20 +215,25 @@ export default function Verify() {
                           </InputOTPGroup>
                         </InputOTP>
                       </FormControl>
-                      <FormDescription>
-                        <Button
-                          onClick={handleSendOtp}
-                          type="button"
-                          variant="link"
-                          disabled={timer !== 0}
-                          className={cn("p-0 m-0", {
-                            "cursor-pointer": timer === 0,
-                            "text-gray-500": timer !== 0,
-                          })}
-                        >
-                          Resend OTP:
-                        </Button>{" "}
-                        {timer}
+                      <FormDescription className="text-sm">
+                        {timer === 0 ? (
+                          <Button
+                            onClick={handleResendOtp}
+                            type="button"
+                            variant="link"
+                            disabled={globalUiBlock}
+                            className="p-0 m-0 h-auto font-medium text-orange-500 hover:text-orange-600 underline"
+                          >
+                            Resend OTP
+                          </Button>
+                        ) : (
+                          <span className="text-slate-500">
+                            Resend OTP available in:{" "}
+                            <strong className="font-mono text-slate-700">
+                              {formatTime(timer)}
+                            </strong>
+                          </span>
+                        )}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -198,8 +244,8 @@ export default function Verify() {
           </CardContent>
 
           <CardFooter className="flex justify-end">
-            <Button form="otp-form" type="submit">
-              Submit
+            <Button form="otp-form" type="submit" disabled={globalUiBlock}>
+              {isVerifying ? "Verifying..." : "Submit"}
             </Button>
           </CardFooter>
         </Card>
@@ -213,8 +259,12 @@ export default function Verify() {
           </CardHeader>
 
           <CardFooter className="flex justify-end">
-            <Button onClick={handleSendOtp} className="w-75">
-              Confirm
+            <Button
+              onClick={handleSendOtp}
+              className="w-75 bg-orange-500 hover:bg-orange-600 text-white"
+              disabled={globalUiBlock}
+            >
+              {isSending ? "Processing..." : "Confirm"}
             </Button>
           </CardFooter>
         </Card>
