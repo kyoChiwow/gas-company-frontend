@@ -15,7 +15,7 @@ import {
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { getSidebarItems } from "@/utils/getSidebarItems";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Added to dynamically track active route
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import Logo from "./miscellaneous/Logo";
 

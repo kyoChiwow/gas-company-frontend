@@ -35,6 +35,10 @@ export const adminSidebarItems: ISidebarItem[] = [
       {
         title: "Requested Quotas",
         url: "/dashboard/quotas",
+      },
+      {
+        title: "Payments",
+        url: "/dashboard/payments",
       }
     ],
   },

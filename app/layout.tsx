@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Taher Enterprise",
-  description: "Checkout our portfolio and services!",
+  title: "Taher Enterprise E-commerce",
+  description: "Taher Enterprise E-commerce, Buy Now, Pay Later!",
   icons: {
     icon: "/tab-icon.jpeg"
   }
