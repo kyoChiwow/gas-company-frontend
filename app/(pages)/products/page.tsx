@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, X, ShieldCheck, Truck, Clock, Flame } from "lucide-react";
+import { Search, X, ShieldCheck, Truck, Clock, Flame, Grid, LayoutList } from "lucide-react";
 import { useGetAllProductsQuery } from "@/redux/features/products/products.auth";
 import ProductGrid from "@/components/modules/products/ProductGrid";
 import ProductPagination from "@/components/modules/products/ProductPagination";
@@ -18,6 +18,7 @@ const trustBadges = [
 export default function ProductsPage() {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [layout, setLayout] = useState<"grid" | "list">("grid"); // New layout state
 
   const { data, isLoading } = useGetAllProductsQuery({
     page,
@@ -30,10 +31,16 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-linear-to-br from-[#0A2A66] via-[#0E65C9] to-[#38BDF8] pb-32 pt-24 sm:pt-28">
-        <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-sky-400/20 blur-[120px]" />
-        <div className="pointer-events-none absolute bottom-0 right-0 h-100 w-100 rounded-full bg-orange-500/20 blur-[120px]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_0)] bg-size-[28px_28px]" />
+      <section 
+        className="relative overflow-hidden bg-cover bg-center bg-no-repeat pb-32 pt-24 sm:pt-28"
+        style={{ backgroundImage: "url('/product-banner.png')" }}
+      >
+        {/* Dark Tint Overlay to ensure high text legibility over any picture background */}
+        <div className="absolute inset-0 bg-slate-900/65 backdrop-blur-xs" />
+
+        {/* Ambient light glow decorators */}
+        <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-sky-500/10 blur-[120px]" />
+        <div className="pointer-events-none absolute bottom-0 right-0 h-100 w-100 rounded-full bg-orange-500/10 blur-[120px]" />
 
         <div className="container relative z-10 mx-auto px-6">
           <motion.div
@@ -42,16 +49,16 @@ export default function ProductsPage() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="mx-auto max-w-3xl text-center"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-orange-300/30 bg-orange-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-orange-200 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-orange-300/30 bg-orange-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-orange-200 backdrop-blur-sm">
               <Flame className="h-3.5 w-3.5" />
               Product Catalogue
             </span>
 
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-7xl">
+            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-7xl drop-shadow-md">
               Our Products
             </h1>
 
-            <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-sky-100 sm:text-lg">
+            <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-slate-100 sm:text-lg drop-shadow-xs">
               Browse our complete collection of gas products and submit
               quotation requests directly to our sales team.
             </p>
@@ -66,9 +73,9 @@ export default function ProductsPage() {
               {trustBadges.map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-2 text-sm font-medium text-sky-100/90"
+                  className="flex items-center gap-2 text-sm font-medium text-slate-100 drop-shadow-xs"
                 >
-                  <Icon className="h-4 w-4 text-orange-300" />
+                  <Icon className="h-4 w-4 text-orange-400" />
                   {label}
                 </div>
               ))}
@@ -124,7 +131,7 @@ export default function ProductsPage() {
         </motion.div>
       </div>
 
-      {/* Products */}
+      {/* Products Display Section */}
       <section className="container mx-auto px-6 py-16 sm:py-20">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -163,16 +170,45 @@ export default function ProductsPage() {
             </p>
           </div>
 
-          {searchTerm && !isLoading && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSearchTerm("")}
-              className="w-fit border-sky-200 text-sky-600 hover:bg-sky-50 hover:text-sky-700"
-            >
-              Clear search
-            </Button>
-          )}
+          {/* Controls: Search clear & layout switches */}
+          <div className="flex items-center gap-3 self-end sm:self-auto">
+            {searchTerm && !isLoading && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSearchTerm("")}
+                className="border-sky-200 text-sky-600 hover:bg-sky-50 hover:text-sky-700"
+              >
+                Clear search
+              </Button>
+            )}
+
+            {/* Layout Switcher Toggles */}
+            <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200">
+              <button
+                onClick={() => setLayout("grid")}
+                className={`p-2 rounded-lg transition-all ${
+                  layout === "grid"
+                    ? "bg-white text-sky-600 shadow-xs"
+                    : "text-slate-400 hover:text-slate-600"
+                }`}
+                aria-label="Grid View"
+              >
+                <Grid className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setLayout("list")}
+                className={`p-2 rounded-lg transition-all ${
+                  layout === "list"
+                    ? "bg-white text-sky-600 shadow-xs"
+                    : "text-slate-400 hover:text-slate-600"
+                }`}
+                aria-label="List View"
+              >
+                <LayoutList className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </motion.div>
 
         {!isLoading && products.length === 0 ? (
@@ -204,7 +240,8 @@ export default function ProductsPage() {
             )}
           </motion.div>
         ) : (
-          <ProductGrid products={products} isLoading={isLoading} />
+          /* Dynamic layout state injection */
+          <ProductGrid products={products} isLoading={isLoading} layout={layout} />
         )}
 
         {!isLoading && products.length > 0 && (
