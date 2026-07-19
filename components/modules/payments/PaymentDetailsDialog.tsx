@@ -122,7 +122,9 @@ export function PaymentDetailsDialog({
                   </span>
                 </div>
                 <div className="flex items-start md:items-center justify-between flex-col gap-3 md:flex-row text-sm">
-                  <span className="shrink-0 text-slate-500">Transaction ID</span>
+                  <span className="shrink-0 text-slate-500">
+                    Transaction ID
+                  </span>
                   <span className="min-w-0 font-semibold text-slate-800">
                     {payment.transactionId ? (
                       <CopyableValue value={payment.transactionId} />
@@ -132,7 +134,9 @@ export function PaymentDetailsDialog({
                   </span>
                 </div>
                 <div className="flex items-start md:items-center justify-between gap-3 flex-col md:flex-row text-sm">
-                  <span className="shrink-0 text-slate-500">Product / Item</span>
+                  <span className="shrink-0 text-slate-500">
+                    Product / Item
+                  </span>
                   <span className="truncate font-medium text-slate-800">
                     {getProductLabel(payment)}
                   </span>
@@ -147,15 +151,21 @@ export function PaymentDetailsDialog({
               </h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="shrink-0 text-sm text-slate-500">Status</span>
+                  <span className="shrink-0 text-sm text-slate-500">
+                    Status
+                  </span>
                   <StatusBadge status={payment.status} />
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="shrink-0 text-sm text-slate-500">Method</span>
+                  <span className="shrink-0 text-sm text-slate-500">
+                    Method
+                  </span>
                   <MethodBadge method={payment.paymentMethod} />
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="shrink-0 text-sm text-slate-500">Placed On</span>
+                  <span className="shrink-0 text-sm text-slate-500">
+                    Placed On
+                  </span>
                   <span className="text-right text-sm font-medium text-slate-600">
                     {payment.createdAt
                       ? dateFormatter.format(new Date(payment.createdAt))
@@ -200,7 +210,9 @@ export function PaymentDetailsDialog({
               {!payment.invoiceUrl ? (
                 <div className="p-8 text-center text-slate-400">
                   <FileText className="mx-auto mb-2 h-12 w-12 opacity-30" />
-                  <p className="text-sm">No invoice attached to this transaction.</p>
+                  <p className="text-sm">
+                    No invoice attached to this transaction.
+                  </p>
                 </div>
               ) : isLegacyFormat ? (
                 <div className="max-w-sm p-8 text-center">
@@ -210,8 +222,8 @@ export function PaymentDetailsDialog({
                   </h5>
                   <p className="text-xs leading-relaxed text-slate-500">
                     This document uses an older backend structure. Inline
-                    previews are unavailable, but you can view it safely
-                    using the button above.
+                    previews are unavailable, but you can view it safely using
+                    the button above.
                   </p>
                 </div>
               ) : (
@@ -232,7 +244,11 @@ export function PaymentDetailsDialog({
                       size="sm"
                       className="rounded-lg bg-linear-to-r from-orange-500 to-orange-400 text-white hover:from-orange-600 hover:to-orange-500"
                     >
-                      <a href={payment.invoiceUrl} target="_blank" rel="noreferrer">
+                      <a
+                        href={payment.invoiceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Open PDF
                       </a>
                     </Button>

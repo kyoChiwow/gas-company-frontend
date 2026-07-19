@@ -6,6 +6,7 @@ import {
   Package2,
   Tags,
   User,
+  Wallet2,
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
@@ -52,6 +53,12 @@ const actions = [
     description: "Manage customer quotas",
     href: "/dashboard/quotas",
     icon: Package2,
+  },
+  {
+    title: "Payments",
+    description: "Manage customer payments",
+    href: "/dashboard/payments",
+    icon: Wallet2,
   },
 ];
 
