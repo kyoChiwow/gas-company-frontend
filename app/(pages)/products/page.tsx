@@ -18,7 +18,7 @@ const trustBadges = [
 export default function ProductsPage() {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [layout, setLayout] = useState<"grid" | "list">("grid"); // New layout state
+  const [layout, setLayout] = useState<"grid" | "list">("grid");
 
   const { data, isLoading } = useGetAllProductsQuery({
     page,

@@ -144,7 +144,11 @@ export default function RequestQuotaDialog({
       <DialogContent className="w-[92vw] max-w-md sm:max-w-lg rounded-2xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-lg sm:text-xl font-bold text-slate-800">
-            {step === 1 && `Request Quota — ${productName}`}
+            {step === 1 && (
+              <>
+                Request Quota :<span className="block">{productName}</span>
+              </>
+            )}
             {step === 2 && "Select Payment Method"}
             {step === 3 && "Order Placed Successfully"}
           </DialogTitle>
