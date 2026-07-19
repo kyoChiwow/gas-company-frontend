@@ -59,6 +59,8 @@ export default function QuotasPage() {
   const quotas = data?.data ?? [];
   const meta = data?.meta;
 
+  console.log(quotas);
+
   const handleCloseQuota = async () => {
     if (!quotaToClose) return;
     try {

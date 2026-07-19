@@ -17,6 +17,14 @@ export const paymentsApi = baseApi.injectEndpoints({
       }),
       providesTags: ["PAYMENT"],
     }),
+    getMyPayments: builder.query({
+      query: (params) => ({
+        url: "/payment/my-payments",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["PAYMENT"],
+    }),
     updatePayment: builder.mutation({
       query: ({ id, paymentData }) => ({
         url: `/payment/${id}`,
@@ -32,4 +40,5 @@ export const {
   useGetAllPaymentsQuery,
   useGetSinglePaymentQuery,
   useUpdatePaymentMutation,
+  useGetMyPaymentsQuery,
 } = paymentsApi;
