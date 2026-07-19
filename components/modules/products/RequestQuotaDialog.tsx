@@ -341,7 +341,7 @@ export default function RequestQuotaDialog({
             </div>
 
             <div className="flex flex-col gap-3">
-              <Button
+              {/* <Button
                 variant="outline"
                 disabled={isProcessingPayment}
                 onClick={() => handlePaymentSelect("sslcommerz")}
@@ -358,7 +358,7 @@ export default function RequestQuotaDialog({
                     Cards, Netbanking, bKash, Nagad
                   </div>
                 </div>
-              </Button>
+              </Button> */}
 
               <Button
                 variant="outline"
