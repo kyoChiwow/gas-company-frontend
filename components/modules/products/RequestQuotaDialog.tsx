@@ -23,7 +23,7 @@ import {
   useAddQuotaMutation,
   useInitPaymentMutation,
 } from "@/redux/features/quota/quota.auth";
-import { CheckCircle2, CreditCard, Flame, Repeat, Truck } from "lucide-react";
+import { CheckCircle2, Flame, Repeat, Truck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
