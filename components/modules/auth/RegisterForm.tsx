@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { Button } from "@/components/ui/button";
@@ -65,23 +66,38 @@ export function RegisterForm({
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
-    try {
-      const result = await register(userInfo).unwrap();
-      console.log(result);
-
-      dispatch(setVerifyEmail(data.email));
-
-      toast.success("User created successfully!");
-      navigate.push("/verify");
-    } catch (error) {
-      console.log(error);
-    }
+  const userInfo = {
+    name: data.name,
+    email: data.email,
+    password: data.password,
   };
+
+  try {
+    const result = await register(userInfo).unwrap();
+    console.log(result);
+
+    dispatch(setVerifyEmail(data.email));
+
+    toast.success("User created successfully!");
+    navigate.push("/verify");
+  } catch (error: any) {
+    console.log(error);
+
+    // 1. If backend returns Zod/Array validation errors (errorSources)
+    const errorSources = error?.data?.errorSources;
+    if (errorSources && Array.isArray(errorSources) && errorSources.length > 0) {
+      errorSources.forEach((err: { path: string; message: string }) => {
+        toast.error(err.message);
+      });
+      return;
+    }
+
+    // 2. Fallback to general backend message or standard error
+    const errorMessage =
+      error?.data?.message || error?.message || "Something went wrong!";
+    toast.error(errorMessage);
+  }
+};
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
