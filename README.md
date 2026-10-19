@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Taher Enterprise — Frontend
+
+A responsive gas management web application for Taher Enterprise, built with Next.js and TypeScript. The application provides interfaces for managing products, categories, brands, product types, sections, users, customer quotas, and payments.
+
+## Features
+
+- **Product Management:** Browse and manage gas products and related information.
+- **Category Management:** Organize products into categories.
+- **Brand Management:** Manage product brands.
+- **Product Types and Sections:** Organize products and homepage content.
+- **User Management:** Access user account management features.
+- **Quota Management:** View and manage customer quota requests.
+- **Payment Management:** Access customer payment information.
+- **Authentication:** Integrate with the backend authentication system.
+- **Responsive Interface:** Layout designed for desktop and mobile screens.
+- **Image Uploads:** Integrate with the backend upload functionality for product images.
+
+## Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Lucide React
+- REST API integration
+
+## Prerequisites
+
+- Node.js and npm
+- Access to the Taher Enterprise backend API
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone <YOUR_FRONTEND_REPOSITORY_URL>
+cd <YOUR_FRONTEND_PROJECT_DIRECTORY>
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env.local` file in the frontend project root.
+
+Add the environment variables required by your application. For example, if your API URL is configured through `NEXT_PUBLIC_API_URL`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1
+```
+
+Replace the URL and variable name with the values expected by your actual frontend configuration. Use your deployed backend URL when deploying the application.
+
+Never put private API keys, database credentials, JWT secrets, or other backend secrets in `NEXT_PUBLIC_` variables.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser, unless your development server uses another port.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. Build for production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+To run the production build locally:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application uses Next.js routing. The exact structure may vary by feature.
 
-## Deploy on Vercel
+```text
+frontend/
+├── public/
+├── src/
+│   ├── app/
+│   │   └── dashboard/
+│   ├── components/
+│   ├── hooks/
+│   ├── lib/
+│   └── ...
+├── package.json
+└── README.md
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Backend Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The frontend communicates with the Taher Enterprise backend through REST API endpoints. The backend handles business logic, database operations, authentication, and payment processing.
+
+Ensure the backend is running and the frontend API configuration points to the correct backend URL.
+
+## Security
+
+- Keep private credentials out of the frontend source code.
+- Do not commit `.env.local` or other files containing secrets.
+- Use HTTPS for production API communication.
+- Restrict administrative functionality according to the backend authorization rules.
+
+## License
+
+This project was developed for the Taher Enterprise gas management application.
