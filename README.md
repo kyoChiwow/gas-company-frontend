@@ -111,4 +111,4 @@ Ensure the backend is running and the frontend API configuration points to the c
 
 ## License
 
-This project was developed for the Taher Enterprise gas management application.
+This project was developed by Shafiqul Islam.
